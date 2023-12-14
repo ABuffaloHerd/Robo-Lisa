@@ -38,26 +38,34 @@ TOKEN = os.getenv("TOKEN")
 
 bot = Client(intents=Intents.ALL)
 
-@listen()  # this decorator tells snek that it needs to listen for the corresponding event, and run this coroutine
+@listen()
 async def on_ready():
-    # This event is called when the bot is ready to respond to commands
     print("Ready")
     print(f"This bot is owned by {bot.owner}.")
 
-
 @listen()
-async def on_message_create(event:MessageCreate):
-    if event.message.author == bot.user:
+async def on_message_create(event: MessageCreate):
+    if event.message.author.bot:  # Check if the message is from a bot
         return
 
     text = event.message.content
+    emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.4)
+    emoji_name = emoji_list[0]
 
-    emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
+    emojis = await event.message.guild.fetch_all_custom_emojis()
+    emoji = ""
 
-    await event.message.reply(
-        emoji_list
-    )
+    print(emojis)
 
+    for guild_emoji in emojis:
+        print(guild_emoji)
+        if guild_emoji.name == emoji_name:
+            emoji = guild_emoji
+
+    if emoji:
+        await event.message.channel.send(str(emoji))
+    else:
+        await event.message.channel.send("No Emoji " + str(emoji_list))
 
 
 bot.start(TOKEN)
