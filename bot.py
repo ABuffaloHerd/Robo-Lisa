@@ -3,6 +3,8 @@ from interactions.api.events import MessageCreate
 from dotenv import load_dotenv
 import os
 import pickle
+import random
+import asyncio
 
 def load_pickle(file_name):
     with open(file_name, 'rb') as file:
@@ -38,22 +40,40 @@ TOKEN = os.getenv("TOKEN")
 
 bot = Client(intents=Intents.ALL)
 
+# count of how many replies the bot has before it stops.
+count = 5
+
+async def increment_count_every_2_hours():
+    global count
+    while True:
+        count += 1
+        await asyncio.sleep(2 * 60 * 60)  # 2 hours in seconds
+
 @listen()
 async def on_ready():
     print("Ready")
     print(f"This bot is owned by {bot.owner}.")
+    asyncio.create_task(increment_count_every_2_hours())
 
 @listen()
 async def on_message_create(event: MessageCreate):
     if event.message.author.bot:  # Check if the message is from a bot
         return
+    
+    global count
+    if count <= 0:
+        return
 
     text = event.message.content
-    emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.4)
-    emoji_name = emoji_list[0]
+    emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
+    if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
+        emoji_name = emoji_list[0]
+    else:
+        count = count+1
+        return
 
     emojis = await event.message.guild.fetch_all_custom_emojis()
-    emoji = ""
+    emoji = emoji_name
 
     print(emojis)
 
@@ -65,7 +85,9 @@ async def on_message_create(event: MessageCreate):
     if emoji:
         await event.message.channel.send(str(emoji))
     else:
-        await event.message.channel.send("No Emoji " + str(emoji_list))
+        await event.message.channel.send(str(emoji)+"*")
+
+    count = count-1
 
 
 bot.start(TOKEN)
