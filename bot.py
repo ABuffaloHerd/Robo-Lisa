@@ -59,10 +59,23 @@ async def on_ready():
 async def on_message_create(event: MessageCreate):
     if event.message.author.bot:  # Check if the message is from a bot
         return
-    
+
     global count
-    if count <= 0:
-        return
+    msg = event.message
+
+    # Check if the bot is mentioned
+    bot_mentioned = (
+        f"@{bot.user.id}" in msg.content or
+        f"<@{bot.user.id}>" in msg.content
+    )
+    if bot_mentioned:
+        count = count+1
+
+    # Determine whether to skip the count and random chance check
+    skip_check = bot_mentioned or (count > 0 and random.randint(1, 10) == 1)
+
+    if not skip_check:
+        return #print(f"Check not passed. Exiting function. {bot_mentioned}, {count}")
 
     text = event.message.content
     emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
