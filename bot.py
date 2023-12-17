@@ -105,9 +105,8 @@ async def on_message_create(event: MessageCreate):
             else:
                 await event.message.channel.send(emojis_to_send)
         else:
-            return
+            await event.message.channel.send("https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-im-so-confused-confused-gif-4572653")
 
         count = count-1
-
 
 bot.start(TOKEN)
