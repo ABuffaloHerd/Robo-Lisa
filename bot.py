@@ -51,7 +51,6 @@ async def increment_count_every_2_hours():
 
 @listen()
 async def on_ready():
-    print("Ready")
     print(f"This bot is owned by {bot.owner}.")
     asyncio.create_task(increment_count_every_2_hours())
 
@@ -86,7 +85,6 @@ async def on_message_create(event: MessageCreate):
     if not skip_check:
         return #print(f"Check not passed. Exiting function. {bot_mentioned}, {count}")
 
-    print(text)
     emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
 
     if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
