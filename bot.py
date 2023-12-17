@@ -70,7 +70,7 @@ async def on_message_create(event: MessageCreate):
     )
     if bot_mentioned:
         #gets rid of bot's name before running through the classifier
-        text = msg.content.replace(f"@{bot.user.id}", "").replace(f"<@{bot.user.id}>", "").strip()
+        text = msg.content.replace(f"<@{bot.user.id}>", "").strip()
 
         #wakes the bot up for a bit
         count = count+3
@@ -78,12 +78,15 @@ async def on_message_create(event: MessageCreate):
     else: 
         text = msg.content
 
+    text = str(msg.author)[1:] + " " + text
+
     # Determine whether to skip the count and random chance check
     skip_check = bot_mentioned or (count > 0 and random.randint(1, 10) == 1)
 
     if not skip_check:
         return #print(f"Check not passed. Exiting function. {bot_mentioned}, {count}")
 
+    print(text)
     emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
 
     if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
