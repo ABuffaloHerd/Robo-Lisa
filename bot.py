@@ -41,13 +41,13 @@ TOKEN = os.getenv("TOKEN")
 bot = Client(intents=Intents.ALL)
 
 # count of how many replies the bot has before it stops.
-count = 5
+count = 200
 
 async def increment_count_every_2_hours():
     global count
     while True:
-        count += 1
-        await asyncio.sleep(2 * 60 * 60)  # 2 hours in seconds
+        count += 3
+        await asyncio.sleep(3 * 60 * 60)  # 2 hours in seconds
 
 @listen()
 async def on_ready():
@@ -69,7 +69,14 @@ async def on_message_create(event: MessageCreate):
         f"<@{bot.user.id}>" in msg.content
     )
     if bot_mentioned:
-        count = count+1
+        #gets rid of bot's name before running through the classifier
+        text = msg.content.replace(f"@{bot.user.id}", "").replace(f"<@{bot.user.id}>", "").strip()
+
+        #wakes the bot up for a bit
+        count = count+3
+
+    else: 
+        text = msg.content
 
     # Determine whether to skip the count and random chance check
     skip_check = bot_mentioned or (count > 0 and random.randint(1, 10) == 1)
@@ -77,30 +84,27 @@ async def on_message_create(event: MessageCreate):
     if not skip_check:
         return #print(f"Check not passed. Exiting function. {bot_mentioned}, {count}")
 
-    text = event.message.content
     emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
+
     if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
-        emoji_name = emoji_list[0]
-    else:
-        count = count+1
-        return
+        guild_emojis = await event.message.guild.fetch_all_custom_emojis()
 
-    emojis = await event.message.guild.fetch_all_custom_emojis()
-    emoji = emoji_name
+        emojis_to_send = ""
 
-    print(emojis)
+        for emoji_name in emoji_list:
+            for guild_emoji in guild_emojis:
+                if guild_emoji.name == emoji_name.replace(":",""):
+                    emojis_to_send += str(guild_emoji)
 
-    for guild_emoji in emojis:
-        print(guild_emoji)
-        if guild_emoji.name == emoji_name:
-            emoji = guild_emoji
+        if emojis_to_send:
+            if random.randint(1, 2) == 1:
+                await event.message.reply(emojis_to_send)
+            else:
+                await event.message.channel.send(emojis_to_send)
+        else:
+            return
 
-    if emoji:
-        await event.message.channel.send(str(emoji))
-    else:
-        await event.message.channel.send(str(emoji)+"*")
-
-    count = count-1
+        count = count-1
 
 
 bot.start(TOKEN)
