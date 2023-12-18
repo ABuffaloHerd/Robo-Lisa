@@ -34,6 +34,19 @@ def predict_emoji(text, classifier, vectorizer, threshold=0.1):
     
     return emojis
 
+def response_to(message):
+    reply = ""
+
+    keywords = {
+        "actually": lambda: "https://tenor.com/view/nerd-dog-nerd-dog-gif-nerd-dog-alen-orbanic-gif-15562966513664309472",
+        # add here as required
+    }
+
+    for keyword, action in keywords.items():
+        if keyword in message:
+            reply = action()
+
+    return reply
 
 load_dotenv()
 TOKEN = os.getenv("TOKEN")
@@ -61,6 +74,10 @@ async def on_message_create(event: MessageCreate):
 
     global count
     msg = event.message
+
+    trigger = response_to(msg.content)
+    if trigger != "":
+        await event.message.reply(trigger)
 
     # Check if the bot is mentioned
     bot_mentioned = (
