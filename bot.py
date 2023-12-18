@@ -78,6 +78,7 @@ async def on_message_create(event: MessageCreate):
     trigger = response_to(msg.content)
     if trigger != "":
         await event.message.reply(trigger)
+        return
 
     # Check if the bot is mentioned
     bot_mentioned = (
