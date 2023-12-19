@@ -15,7 +15,15 @@ vectorizer = load_pickle('vectorizer.pkl')
 classifier = load_pickle('classifier.pkl')
 encoded_to_string = load_pickle('encoded_to_string.pkl')
 
-# Your get_emoji_back function here
+def retrain_vectorizer():
+    return vectorizer
+
+def retrain_classifier():
+    return classifier
+
+def update_encoder():
+    return encoded_to_string
+
 def get_emoji_back(encoded_number):
     return encoded_to_string.get(encoded_number, "Unknown")
 
@@ -34,6 +42,7 @@ def predict_emoji(text, classifier, vectorizer, threshold=0.1):
     
     return emojis
 
+# put canned responses
 def response_to(message):
     reply = ""
 
@@ -121,7 +130,7 @@ async def on_message_create(event: MessageCreate):
             else:
                 await event.message.channel.send(emojis_to_send)
         else:
-            await event.message.channel.send("https://tenor.com/view/friends-joey-tribbiani-matt-le-blanc-im-so-confused-confused-gif-4572653")
+            await event.message.channel.send("HUH")
 
         count = count-1
 
