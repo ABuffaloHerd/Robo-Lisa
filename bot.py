@@ -5,6 +5,7 @@ import os
 import pickle
 import random
 import asyncio
+import bot_retrainer
 
 def load_pickle(file_name):
     with open(file_name, 'rb') as file:
@@ -14,15 +15,6 @@ def load_pickle(file_name):
 vectorizer = load_pickle('vectorizer.pkl')
 classifier = load_pickle('classifier.pkl')
 encoded_to_string = load_pickle('encoded_to_string.pkl')
-
-def retrain_vectorizer():
-    return vectorizer
-
-def retrain_classifier():
-    return classifier
-
-def update_encoder():
-    return encoded_to_string
 
 def get_emoji_back(encoded_number):
     return encoded_to_string.get(encoded_number, "Unknown")
@@ -48,6 +40,7 @@ def response_to(message):
 
     keywords = {
         "actually": lambda: "https://tenor.com/view/nerd-dog-nerd-dog-gif-nerd-dog-alen-orbanic-gif-15562966513664309472",
+        "lisa burger": lambda: "https://cdn.discordapp.com/attachments/1113266262345273428/1186607742887141477/image0.jpg?ex=6593dd94&is=65816894&hm=a31469454b54cc2fc8a7277d48b25e72db048b8ea94e8700bdbdaa5bc28e49a1&",
         # add here as required
     }
 
@@ -69,6 +62,7 @@ async def increment_count_every_2_hours():
     global count
     while True:
         count += 3
+        # run retrainer
         await asyncio.sleep(3 * 60 * 60)  # 2 hours in seconds
 
 @listen()
