@@ -1,21 +1,7 @@
 import pandas as pd
-import numpy as np
-import pickle
-from sklearn.preprocessing import LabelEncoder
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, make_scorer
-from collections import Counter
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import make_scorer, f1_score
 from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestClassifier
 
 def retrain_classifier(df):
     X = df['author_and_message']
