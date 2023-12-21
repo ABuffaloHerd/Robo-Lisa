@@ -15,16 +15,20 @@ def load_pickle(file_name):
 vectorizer = load_pickle('vectorizer.pkl')
 classifier = load_pickle('classifier.pkl')
 encoded_to_string = load_pickle('encoded_to_string.pkl')
+tfidf_transformer = ""
 
 def get_emoji_back(encoded_number):
     return encoded_to_string.get(encoded_number, "Unknown")
 
-def predict_emoji(text, classifier, vectorizer, threshold=0.1):
+def predict_emoji(text, classifier, vectorizer, tfidf_transformer, threshold=0.1):
     # Preprocess and vectorize the input text
     text_vectorized = vectorizer.transform([text])
-    
+
+    # TFIDF Convert
+    text_tfidf = tfidf_transformer.transform(text_vectorized)
+
     # Get probabilities for each emoji
-    probabilities = classifier.predict_proba(text_vectorized)[0]
+    probabilities = classifier.predict_proba(text_tfidf)[0]
 
     # Filter out predictions with probabilities above the threshold
     high_prob_indices = [i for i, prob in enumerate(probabilities) if prob > threshold]
@@ -40,7 +44,7 @@ def response_to(message):
 
     keywords = {
         "actually": lambda: "https://tenor.com/view/nerd-dog-nerd-dog-gif-nerd-dog-alen-orbanic-gif-15562966513664309472",
-        "lisa burger": lambda: "https://cdn.discordapp.com/attachments/1113266262345273428/1186607742887141477/image0.jpg?ex=6593dd94&is=65816894&hm=a31469454b54cc2fc8a7277d48b25e72db048b8ea94e8700bdbdaa5bc28e49a1&",
+        "lisa burger": lambda: "https://media.discordapp.net/attachments/1113266262345273428/1187365137598922802/imageedit_9_9053779888.png?ex=65969ef4&is=658429f4&hm=8ea4ed39282ce942d2556cced752afcc23353607d02a60e7b5119a4ac9c8e43f&=&format=webp&quality=lossless&width=462&height=462",
         # add here as required
     }
 
@@ -56,19 +60,21 @@ TOKEN = os.getenv("TOKEN")
 bot = Client(intents=Intents.ALL)
 
 # count of how many replies the bot has before it stops.
-count = 200
+count = 10
 
-async def increment_count_every_2_hours():
-    global count
+async def run_every_2_hours():
+    global count, vectorizer, tfidf_transformer, classifier, encoded_to_string
     while True:
         count += 3
-        # run retrainer
-        await asyncio.sleep(3 * 60 * 60)  # 2 hours in seconds
+
+        vectorizer, tfidf_transformer, classifier, encoded_to_string = bot_retrainer.retrain_bot()
+
+        await asyncio.sleep(3 * 60 * 60)  # 3 hours in seconds
 
 @listen()
 async def on_ready():
     print(f"This bot is owned by {bot.owner}.")
-    asyncio.create_task(increment_count_every_2_hours())
+    asyncio.create_task(run_every_2_hours())
 
 @listen()
 async def on_message_create(event: MessageCreate):
@@ -101,12 +107,12 @@ async def on_message_create(event: MessageCreate):
     text = str(msg.author)[1:] + " " + text
 
     # Determine whether to skip the count and random chance check
-    skip_check = bot_mentioned or (count > 0 and random.randint(1, 10) == 1)
+    skip_check = bot_mentioned or (count > 0 and random.randint(1, 15) == 1)
 
     if not skip_check:
         return #print(f"Check not passed. Exiting function. {bot_mentioned}, {count}")
 
-    emoji_list = predict_emoji(text, classifier, vectorizer, threshold=0.1)
+    emoji_list = predict_emoji(text, classifier, vectorizer, tfidf_transformer,threshold=0.1)
 
     if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
         guild_emojis = await event.message.guild.fetch_all_custom_emojis()
@@ -124,7 +130,8 @@ async def on_message_create(event: MessageCreate):
             else:
                 await event.message.channel.send(emojis_to_send)
         else:
-            await event.message.channel.send("HUH")
+            if random.randint(1, 2) == 1:
+                await event.message.channel.send("HUH")
 
         count = count-1
 
