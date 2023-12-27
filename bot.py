@@ -6,6 +6,7 @@ import pickle
 import random
 import asyncio
 import bot_retrainer
+import bot_recorder
 
 def load_pickle(file_name):
     with open(file_name, 'rb') as file:
@@ -78,15 +79,19 @@ async def on_ready():
 
 @listen()
 async def on_message_create(event: MessageCreate):
-    if event.message.author.bot:  # Check if the message is from a bot
-        return
-
     global count
     msg = event.message
+    guild_emojis = await msg.guild.fetch_all_custom_emojis()
+
+    if msg.author.bot:  # Check if the message is from a bot
+        return
+    
+    if msg.author == "lisa38":
+        bot_recorder.record_msg(msg, guild_emojis)
 
     trigger = response_to(msg.content)
     if trigger != "":
-        await event.message.reply(trigger)
+        await msg.reply(trigger)
         return
 
     # Check if the bot is mentioned
@@ -115,8 +120,6 @@ async def on_message_create(event: MessageCreate):
     emoji_list = predict_emoji(text, classifier, vectorizer, tfidf_transformer,threshold=0.1)
 
     if emoji_list:  # This is equivalent to checking if len(emoji_list) > 0
-        guild_emojis = await event.message.guild.fetch_all_custom_emojis()
-
         emojis_to_send = ""
 
         for emoji_name in emoji_list:
@@ -126,12 +129,12 @@ async def on_message_create(event: MessageCreate):
 
         if emojis_to_send:
             if random.randint(1, 2) == 1:
-                await event.message.reply(emojis_to_send)
+                await msg.reply(emojis_to_send)
             else:
-                await event.message.channel.send(emojis_to_send)
+                await msg.channel.send(emojis_to_send)
         else:
             if random.randint(1, 2) == 1:
-                await event.message.channel.send("HUH")
+                await msg.channel.send("HUH")
 
         count = count-1
 
