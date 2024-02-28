@@ -42,7 +42,7 @@ def predict_emoji(text, classifier, vectorizer, tfidf_transformer, threshold=0.1
 def answer_question(message):
     #first check if message is a question directed at lisabot
     if message.strip().endswith('?'):
-        
+
         likert_scale = {
         "strong_agree": ["YES", "YESSSS", "Absolutely!"],
         "agree": ["yes", "yessir", "ya"],
@@ -155,11 +155,11 @@ async def on_message_create(event: MessageCreate):
                 if guild_emoji.name == emoji_name.replace(":",""):
                     emojis_to_send += str(guild_emoji)
 
-        if emojis_to_send:
+        if emojis_to_send or likert_answer:
             if random.randint(1, 2) == 1:
                 await msg.reply(likert_answer + emojis_to_send)
             else:
-                await msg.channel.send(likert_answer + emojis_to_send)
+                await msg.channel.send(likert_answer + "" + emojis_to_send)
         else:
             if random.randint(1, 2) == 1:
                 await msg.channel.send("HUH")
