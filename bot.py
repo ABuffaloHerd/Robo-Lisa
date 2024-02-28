@@ -39,6 +39,23 @@ def predict_emoji(text, classifier, vectorizer, tfidf_transformer, threshold=0.1
     
     return emojis
 
+def answer_question(message):
+    #first check if message is a question directed at lisabot
+    if message.strip().endswith('?'):
+        
+        likert_scale = {
+        "strong_agree": ["YES", "YESSSS", "Absolutely!"],
+        "agree": ["yes", "yessir", "ya"],
+        "neutral": ["I actually dont know", "not rn", "lol", "I wish I could but I don't want to"],
+        "disagree": ["nope", "ewww no", "naurrr"],
+        "strong_disagree": ["WHAT NO", "NO", "Absolutely not!!!"]
+        }
+
+        random_opinion = random.choice(list(likert_scale.keys()))
+        likert_answer = random.choice(likert_scale[random_opinion])
+
+        return likert_answer
+
 # put canned responses
 def response_to(message):
     reply = ""
@@ -93,7 +110,10 @@ async def on_message_create(event: MessageCreate):
         #print("lisa spoke")
         bot_recorder.record_msg(msg, guild_emojis)
 
-    # Handles canned responses
+    # this function gets run if the bot is mentioned
+    likert_answer = ""
+
+    #checks for trigger word and sends hardcoded reply
     trigger = response_to(msg.content)
     if trigger != "":
         await msg.reply(trigger)
@@ -110,6 +130,9 @@ async def on_message_create(event: MessageCreate):
 
         #wakes the bot up for a bit
         count = count+3
+
+        #now check if the message is a question for lisa
+        likert_answer = answer_question(msg.content)
 
     else: 
         text = msg.content
@@ -134,9 +157,9 @@ async def on_message_create(event: MessageCreate):
 
         if emojis_to_send:
             if random.randint(1, 2) == 1:
-                await msg.reply(emojis_to_send)
+                await msg.reply(likert_answer + emojis_to_send)
             else:
-                await msg.channel.send(emojis_to_send)
+                await msg.channel.send(likert_answer + emojis_to_send)
         else:
             if random.randint(1, 2) == 1:
                 await msg.channel.send("HUH")
