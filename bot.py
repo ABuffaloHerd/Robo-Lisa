@@ -160,7 +160,7 @@ async def on_message_create(event: MessageCreate):
 
         if emojis_to_send or likert_answer:
             if random.randint(1, 2) == 1:
-                await msg.reply(likert_answer + emojis_to_send)
+                await msg.reply(likert_answer + " " + emojis_to_send)
             else:
                 await msg.channel.send(likert_answer + " " + emojis_to_send)
         else:
