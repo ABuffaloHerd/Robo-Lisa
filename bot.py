@@ -41,7 +41,7 @@ def predict_emoji(text, classifier, vectorizer, tfidf_transformer, threshold=0.1
 
 def answer_question(message):
     #first check if message is a question directed at lisabot
-    if message.strip().endswith('?'):
+    if message.strip().endswith('?') and len(message) > 1:
 
         likert_scale = {
         "strong_agree": ["YES", "YESSSS", "Absolutely!"],
@@ -132,7 +132,7 @@ async def on_message_create(event: MessageCreate):
         count = count+3
 
         #now check if the message is a question for lisa
-        likert_answer = answer_question(msg.content)
+        likert_answer = answer_question(text)
 
     else: 
         text = msg.content
