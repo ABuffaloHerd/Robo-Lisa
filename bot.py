@@ -165,8 +165,11 @@ async def on_message_create(event: MessageCreate):
             else:
                 await msg.channel.send(likert_answer + " " + emojis_to_send)
         else:
-            if random.randint(1, 2) == 1:
+            r = random.randint(1, 4)
+            if  r == 1:
                 await msg.channel.send("HUH")
+            elif r == 2:
+                await msg.channel.send("??")
 
         count = count-1
 
