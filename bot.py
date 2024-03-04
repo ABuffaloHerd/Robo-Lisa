@@ -69,7 +69,7 @@ def response_to(message):
         "research":     lambda: "https://cdn.discordapp.com/attachments/1205091789195837502/1205099075494739978/image.png?ex=65d722f9&is=65c4adf9&hm=0d250958d796faf568f638b7fa9a260afeef7b439f9fafc4a02f3d0b776728af&",
         "are you the real lisa?": lambda: "I am the real Lisa :mad:",
         "blake":        lambda: "https://tenor.com/view/fortnite-fish-guy-fortnite-wow-gif-27449064",
-        "ramesh":       lambda: "https://tenor.com/view/lazycat-lazy-cat-food-coma-knackered-gif-6453121913169784842",
+        "ramesh":       lambda: "https://tenor.com/view/sleeping-sleep-dog-dawg-eeper-gif-5083970977419902566",
         # add here as required
     }
 
