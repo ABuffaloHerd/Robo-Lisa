@@ -1,10 +1,10 @@
 To Do:
 
-let her answer yes no questions.
-    recongnize a question, 
-    generate random answer,
-    append emojis to end,
-    send.
+lock out to stop people spamming the same question.
+
+follow along if everyone is posting the same thing.
+
+hate erin somehow.
 
 Stop her reacting to links.
     check if message begins with http...
