@@ -46,8 +46,8 @@ def answer_question(message):
             likert_scale = {
             "strong_agree": ["YES", "YESSSS", "Absolutely!"],
             "agree": ["yes", "yessir", "ya"],
-            "neutral": ["I actually dont know", "not rn", "lol", "I wish I could but I don't want to", "AYO????", "https://cdn.discordapp.com/attachments/1113266262345273428/1213985020901851146/IMG_7578.png?ex=65f776a7&is=65e501a7&hm=20b5210081b1362c97ca5a5fd5dd02dd33f15b2da783cc44aab2fa1a670d6878&"],
-            "disagree": ["nope", "ewww no", "naurrr"],
+            "neutral": ["I actually dont know", "not rn", "lol", "I wish I could tell you but I don't want to", "AYO????", "https://cdn.discordapp.com/attachments/1113266262345273428/1213985020901851146/IMG_7578.png?ex=65f776a7&is=65e501a7&hm=20b5210081b1362c97ca5a5fd5dd02dd33f15b2da783cc44aab2fa1a670d6878&"],
+            "disagree": ["nope", "ewww no", "naurrr", "joever"],
             "strong_disagree": ["WHAT NO", "NO", "Absolutely not!!!"]
             }
 
