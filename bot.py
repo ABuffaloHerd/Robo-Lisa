@@ -86,7 +86,7 @@ TOKEN = os.getenv("TOKEN")
 bot = Client(intents=Intents.ALL)
 
 # used for determining if everyone is posting the same thing.
-previous_message = ""
+previous_msg = ""
 
 # count of how many replies the bot has before it stops.
 count = 10
@@ -120,10 +120,13 @@ async def on_message_create(event: MessageCreate):
         bot_recorder.record_msg(msg, guild_emojis)
 
     # follow along if everyone is posting the same thing.
-    global previous_message
-    if msg.content == previous_message:
+    global previous_msg
+    if msg.content == previous_msg.content and msg.author != previous_msg.author:
         await msg.channel.send(msg.content)
-    previous_message = msg.content
+    if msg.sticker_items and msg.sticker_items[0] == previous_msg.sticker_items[0]:
+        await msg.channel.send(msg.sticker_items)
+
+    previous_msg = msg
 
     likert_answer = ""
 
