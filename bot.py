@@ -121,11 +121,13 @@ async def on_message_create(event: MessageCreate):
 
     # follow along if everyone is posting the same thing.
     global previous_msg
+    # checks if first time booting up
+    if isinstance(previous_msg, str):
+        previous_msg = msg
     if msg.content == previous_msg.content and msg.author != previous_msg.author:
         await msg.channel.send(msg.content)
-    if msg.sticker_items and msg.sticker_items[0] == previous_msg.sticker_items[0]:
-        await msg.channel.send(msg.sticker_items)
-
+        previous_msg.content = "lisabot"
+        return
     previous_msg = msg
 
     likert_answer = ""
