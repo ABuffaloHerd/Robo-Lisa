@@ -63,12 +63,11 @@ def response_to(message):
     reply = ""
 
     keywords = {
-        "actually":     lambda: "https://tenor.com/view/nerd-dog-nerd-dog-gif-nerd-dog-alen-orbanic-gif-15562966513664309472",
-        "burger":       lambda: "https://media.discordapp.net/attachments/1113266262345273428/1187365137598922802/imageedit_9_9053779888.png?ex=65969ef4&is=658429f4&hm=8ea4ed39282ce942d2556cced752afcc23353607d02a60e7b5119a4ac9c8e43f&=&format=webp&quality=lossless&width=462&height=462",
-        "opinion":      lambda: "https://cdn.discordapp.com/attachments/1168400523104358442/1193073645715734578/y147cc9pwqac1.png?ex=65ab636b&is=6598ee6b&hm=c081a2716fbb8415c6a8be0d8ad8fa24fbfa639a5d97d0d673b15c65e2b984ca&",
-        "research":     lambda: "https://cdn.discordapp.com/attachments/1205091789195837502/1205099075494739978/image.png?ex=65d722f9&is=65c4adf9&hm=0d250958d796faf568f638b7fa9a260afeef7b439f9fafc4a02f3d0b776728af&",
+        "erm actually":     lambda: "https://tenor.com/view/nerd-dog-nerd-dog-gif-nerd-dog-alen-orbanic-gif-15562966513664309472",
+        "lisa burger":       lambda: "https://media.discordapp.net/attachments/1113266262345273428/1187365137598922802/imageedit_9_9053779888.png?ex=65969ef4&is=658429f4&hm=8ea4ed39282ce942d2556cced752afcc23353607d02a60e7b5119a4ac9c8e43f&=&format=webp&quality=lossless&width=462&height=462",
+        "in my opinion":      lambda: "https://cdn.discordapp.com/attachments/1168400523104358442/1193073645715734578/y147cc9pwqac1.png?ex=65ab636b&is=6598ee6b&hm=c081a2716fbb8415c6a8be0d8ad8fa24fbfa639a5d97d0d673b15c65e2b984ca&",
         "are you the real lisa?": lambda: "I am the real Lisa",
-        "blake":        lambda: "https://tenor.com/view/fortnite-fish-guy-fortnite-wow-gif-27449064",
+        "fortnite blake":        lambda: "https://tenor.com/view/fortnite-fish-guy-fortnite-wow-gif-27449064",
         "ramesh":       lambda: "https://tenor.com/view/sleeping-sleep-dog-dawg-eeper-gif-5083970977419902566",
         "too powerful": lambda: "https://cdn.discordapp.com/emojis/853892024879808513.gif?size=128&quality=lossless",
         # add here as required
